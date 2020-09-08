@@ -156,5 +156,6 @@ set up in production, (and stored securely in development).
 [prospector]: https://github.com/landscapeio/prospector
 [GitLab]: https://about.gitlab.com/
 [ReactJS]: https://reactjs.org/
+[Redis]: https://redis.io/
 [Makefile]: https://www.gnu.org/software/make/manual/make.html
 [Docker-Compose]: https://docs.docker.com/compose/
