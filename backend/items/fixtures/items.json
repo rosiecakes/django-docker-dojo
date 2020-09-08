@@ -1,0 +1,32 @@
+[
+  {
+    "model": "items.item",
+    "pk": 1,
+    "fields": {
+      "created": "2019-12-01T22:33:51.266Z",
+      "updated": null,
+      "name": "Luxury Beachball",
+      "price": "8.29"
+    }
+  },
+  {
+    "model": "items.item",
+    "pk": 2,
+    "fields": {
+      "created": "2019-12-01T22:33:51.266Z",
+      "updated": null,
+      "name": "Delicious Ice Cream",
+      "price": "1.99"
+  }
+},
+  {
+    "model": "items.item",
+    "pk": 3,
+    "fields": {
+      "created": "2019-12-01T22:33:51.266Z",
+      "updated": null,
+      "name": "Inflatable Pineapple",
+      "price": "11.35"
+    }
+  }
+]

@@ -1,0 +1,101 @@
+version: '3'
+
+services:
+  # Database container for PostgreSQL
+  db:
+    container_name: db-container
+    image: postgres:12
+    volumes:
+      - db_volume:/var/lib/postgresql/data
+    env_file:
+      - config/db/db_env
+    networks:
+      - db_network
+
+  # Backend container, with both Django + Gunicorn
+  backend:
+    container_name: django-container
+    build: .
+    environment:
+      - DJANGO_SETTINGS_MODULE
+    volumes:
+      - .:/opt/services/backend/src
+      - static:/opt/services/backend/static
+      - media:/opt/services/backend/media
+    networks:
+      - db_network
+      - nginx_network
+      - redis_network
+    links:
+      - redis
+    depends_on:
+      - db
+
+  #  Frontend container for ReactJS
+  frontend:
+    image: node:14.9-buster
+    container_name: react-container
+    working_dir: /frontend
+    stdin_open: true
+    command: ["bash", "-c", "npm install && npm start"]
+    volumes:
+      - ./frontend:/frontend:delegated
+    ports:
+      - 127.0.0.1:3000:3000
+    depends_on:
+      - backend
+
+  # Reverse proxy container for Nginx
+  nginx:
+    container_name: nginx-container
+    image: nginx:1.19
+    ports:
+      - 8000:80
+    volumes:
+      - ./config/nginx/conf.d:/etc/nginx/conf.d
+      - static:/opt/services/backend/static
+      - media:/opt/services/backend/media
+    networks:
+      - nginx_network
+    depends_on:
+      - backend
+
+  # Container specifically for Celery workers
+  worker:
+    container_name: worker-container
+    working_dir: /opt/services/backend/src/backend
+    build: .
+    depends_on:
+      - redis
+    command: sh -c "celery worker -A backend --loglevel=INFO && celery -A backend --beat"
+    volumes:
+      - .:/opt/services/backend/src
+      - static:/opt/services/backend/static
+      - media:/opt/services/backend/media
+    networks:
+      - redis_network
+      - db_network
+
+  #  Message queue for handling Celery tasks
+  redis:
+    container_name: redis-container
+    image: redis:6.0.6
+    networks:
+      - redis_network
+
+# Set up the bridges for DB and Nginx connection
+networks:
+  db_network:
+    driver: bridge
+  nginx_network:
+    driver: bridge
+  redis_network:
+    driver: bridge
+
+# Persist certain volumes
+volumes:
+  db_volume:
+  static:
+  media:
+  node-modules:
+
