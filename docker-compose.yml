@@ -3,7 +3,7 @@ version: '3'
 services:
   # Database container for PostgreSQL
   db:
-    container_name: db-container
+    container_name: postgres
     image: postgres:12
     volumes:
       - db_volume:/var/lib/postgresql/data
@@ -14,7 +14,7 @@ services:
 
   # Backend container, with both Django + Gunicorn
   backend:
-    container_name: django-container
+    container_name: django
     build: .
     environment:
       - DJANGO_SETTINGS_MODULE
@@ -26,15 +26,13 @@ services:
       - db_network
       - nginx_network
       - redis_network
-    links:
-      - redis
     depends_on:
       - db
 
   #  Frontend container for ReactJS
   frontend:
     image: node:14.9-buster
-    container_name: react-container
+    container_name: react
     working_dir: /frontend
     stdin_open: true
     command: ["bash", "-c", "npm install && npm start"]
@@ -47,7 +45,7 @@ services:
 
   # Reverse proxy container for Nginx
   nginx:
-    container_name: nginx-container
+    container_name: nginx
     image: nginx:1.19
     ports:
       - 8000:80
@@ -62,7 +60,7 @@ services:
 
   # Container specifically for Celery workers
   worker:
-    container_name: worker-container
+    container_name: worker
     working_dir: /opt/services/backend/src/backend
     build: .
     depends_on:
@@ -78,7 +76,7 @@ services:
 
   #  Message queue for handling Celery tasks
   redis:
-    container_name: redis-container
+    container_name: redis
     image: redis:6.0.6
     networks:
       - redis_network

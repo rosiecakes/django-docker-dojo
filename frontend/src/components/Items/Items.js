@@ -61,8 +61,8 @@ class Items extends Component {
               <table className="Items-table">
                  <thead>
                     <tr>
-                      <th>Name</th>
-                      <th>Price</th>
+                      <th>Item name</th>
+                      <th>Item price</th>
                     </tr>
                   </thead>
 
