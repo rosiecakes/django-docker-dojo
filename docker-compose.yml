@@ -3,14 +3,16 @@ version: '3'
 services:
   # Database container for PostgreSQL
   db:
+    env_file:
+      - backend/config/db/db_env
     image: postgres:12
     volumes:
       - db_volume:/var/lib/postgresql/data:delegated
-    env_file:
-      - config/db/db_env
 
   # Backend container, with both Django + Gunicorn
   backend:
+    env_file:
+      - backend/config/db/db_env
     build: .
     environment:
       - DJANGO_SETTINGS_MODULE
@@ -40,7 +42,7 @@ services:
     ports:
       - 8000:80
     volumes:
-      - ./config/nginx/conf.d:/etc/nginx/conf.d
+      - ./backend/config/nginx/conf.d:/etc/nginx/conf.d
       - static:/opt/services/backend/static
       - media:/opt/services/backend/media
     depends_on:
@@ -48,6 +50,8 @@ services:
 
   # Container specifically for Celery workers
   worker:
+    env_file:
+      - backend/config/db/db_env
     working_dir: /opt/services/backend/src/backend
     build: .
     depends_on:

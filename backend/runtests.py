@@ -7,7 +7,7 @@ try:
     from django.test.utils import get_runner
 
     if not os.environ.get('DJANGO_SETTINGS_MODULE'):
-        os.environ.setdefault("DJANGO_SETTINGS_MODULE", "backend.backend.settings")
+        os.environ.setdefault("DJANGO_SETTINGS_MODULE", "backend.settings")
 
     try:
         import django

@@ -11,4 +11,4 @@ COPY . /opt/services/backend/src
 RUN cd backend && python manage.py collectstatic --no-input
 
 EXPOSE 8000
-CMD ["gunicorn", "-c", "config/gunicorn/conf.py", "--bind", ":8000", "--chdir", "backend", "backend.wsgi:application"]
+CMD ["gunicorn", "-c", "backend/config/gunicorn/conf.py", "--bind", ":8000", "--chdir", "backend", "backend.wsgi:application"]

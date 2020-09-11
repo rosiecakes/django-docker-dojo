@@ -16,6 +16,11 @@ redis="*"
 [dev-packages]
 tox = "*"
 ipython = "*"
+pytest = "*"
+pytest-cov = "*"
+pytest-django = "*"
+pytest-flake8 = "*"
+pytest-pep8 = "*"
 
 [requires]
 python_version = "3.7"
