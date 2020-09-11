@@ -123,7 +123,7 @@ name 'admin' and the password you specified - and then you'll have access to
 the backend.
 * You should be able to visit http://127.0.0.1:3000 and see the React front-end.
 
-__Running Celery Beat:__
+####Running Celery Beat
 * A pre-made Celery Beat task is included, which is a scheduled task that 
 updates the data on the back-end every few seconds using a simple function. 
 The build process intentionally does not start this task automatically because 
@@ -132,7 +132,7 @@ the task will start augmenting data right away and you may not want that.
 start a task running on the data that you have previously loaded (and it will 
 probably fail if the database is empty).
 
-__Issues getting Docker running__
+####Issues getting Docker running
 Sometimes, if you've been working on other containers, Docker will complain 
 because your local machine still has containers running that have already 
 assigned ports 8000 (Django) and 3000 (ReactJS) locally. If you're getting 
@@ -175,15 +175,15 @@ networks and volumes if you choose to do this.)
 ## Removing things you don't need
 You can, of course, rip out any of the stuff you don't need from this starter 
 project, and you'll almost certainly want to do that with the Django 'Items' 
-app, as well as any dependencies that you don't actually need. You'll just 
+demo app, as well as any dependencies that you don't actually need. You'll just 
 need to:
 
 * Remove any of the directories and files that are surplus to requirements
 * Update the Django settings file to reflect anything you've removed (Celery 
 dictionaries, for example)
-* Run `make uninstall PKG=` for any of the dependencies you don't need 
+* Run `make uninstall PKG=[package-name]` for any of the dependencies you don't need 
 (more details in the Makefile)
-* Run `make install PKG=` for any new dependencies you do need 
+* Run `make install PKG=[package-name]` for any new dependencies you do need 
 (more details in the Makefile)
 * Run `make piplock` to re-lock your requirements, after you've installed what 
 you need
