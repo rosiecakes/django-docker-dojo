@@ -140,8 +140,8 @@ errors that stop these pieces of the build coming up, you'll need to:
 
 * Check your locally running Docker processes using `docker ps`
 * Work out which ones are likely hogging the ports
-* Gracefully stop the container:
-* Or, gracefully stop *all* containers: 
+* Gracefully stop the container: `docker stop [container name]`
+* Or, gracefully stop *all* containers: `docker stop $(docker ps -a -q)`
 
 Now, run `docker ps` again. This should show either only the containers you want
 running, or none at all, depending on how many you stopped.
@@ -151,10 +151,11 @@ __Killing containers__
 generally recommend this, but sometimes Docker is awkward and leaves you with
 no choice.)
 
-To kill a specific container:
-Or, kill all running containers:
+To kill a specific container: `docker kill [container name]`
+Or, kill all running containers: `docker kill $(docker ps -q)`
 
-Now, run `docker ps` again. This should show either on
+Now, run `docker ps` again. This should show either only the containers you want
+running, or none at all, depending on how many you stopped.
 
 #### Going nuclear (take caution)
 You almost never need to do this, but if for some reason you want to go nuclear, 
