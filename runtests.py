@@ -7,11 +7,11 @@ try:
     from django.test.utils import get_runner
 
     if not os.environ.get('DJANGO_SETTINGS_MODULE'):
-        os.environ.setdefault("DJANGO_SETTINGS_MODULE", "backend.settings")
+        os.environ.setdefault("DJANGO_SETTINGS_MODULE", "backend.backend.settings")
 
     try:
         import django
-        sys.path.append(abspath(join(dirname(__file__), 'backend')))
+        sys.path.append(abspath(join(dirname(__file__), 'tests')))
         setup = django.setup
     except AttributeError:
         pass
