@@ -236,6 +236,32 @@ control (remove the `config` directory from VCS), and only make sure that DB,
 Nginx & Gunicorn settings are set up in production, 
 (and stored securely in development).
 
+## Deployment, and certificates in production
+In production, you'll need to issue a TLS security certificate to ensure the
+security of the application at that domain. To do this, Configure the name 
+server so that WEB_DOMAIN points to the IP of your server. The following command
+can be used to generate a Let's Encrypt TLS certificate:
+
+    $ docker run \
+    --publish 80:80 \
+    --volume /root/data/certbot:/etc/letsencrypt \
+    certbot/certbot certonly \
+    --standalone \
+    --register-unsafely-without-email \
+    --rsa-key-size 4096 \
+    --agree-tos \
+    --force-renewal \
+    --domain $WEB_DOMAIN \
+    --staging
+    
+You'll need to ensure that the volume path `/root/data/certbot` is consistent 
+with the path used in the nginx.conf file. Let's Encrypt limits the
+number of certificates that can be generated in a given period of
+time; so use --staging to run as many dry-run attempts you like and
+finally remove it when all seems to be working fine. (It may also be convenient 
+to create a cron script that periodically pauses the web server and launches the
+certificate renewal process, to get around the scheduled expiry.)
+
 ## Ongoing development
 There are lots of ways to improve this repository to make it a strong, generic
 starter for API-driven web applications. Any and all ideas are welcome by
@@ -244,6 +270,8 @@ creating a new issue, and/or issuing a Pull Request.
 We'll also want to make sure that the versions of all of these images, as well
 as the major application dependencies (Django, DRF, Celery, ReactJS) are kept
 up-to-date, based on the release schedules of these pieces of software.
+
+Feel free to get in touch if you want to ask questions, or suggest improvements.
 
 [Celery]: https://docs.celeryproject.org/en/latest/django/first-steps-with-django.html
 [Docker]: https://www.docker.com/
