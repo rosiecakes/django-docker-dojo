@@ -123,7 +123,7 @@ name 'admin' and the password you specified - and then you'll have access to
 the backend.
 * You should be able to visit http://127.0.0.1:3000 and see the React front-end.
 
-####Running Celery Beat
+#### Running Celery Beat
 * A pre-made Celery Beat task is included, which is a scheduled task that 
 updates the data on the back-end every few seconds using a simple function. 
 The build process intentionally does not start this task automatically because 
@@ -132,7 +132,7 @@ the task will start augmenting data right away and you may not want that.
 start a task running on the data that you have previously loaded (and it will 
 probably fail if the database is empty).
 
-####Issues getting Docker running
+#### Issues getting Docker running
 Sometimes, if you've been working on other containers, Docker will complain 
 because your local machine still has containers running that have already 
 assigned ports 8000 (Django) and 3000 (ReactJS) locally. If you're getting 
@@ -151,8 +151,8 @@ __Killing containers__
 generally recommend this, but sometimes Docker is awkward and leaves you with
 no choice.)
 
-To kill a specific container: `docker kill [container name]`
-Or, kill all running containers: `docker kill $(docker ps -q)`
+* To kill a specific container: `docker kill [container name]`
+* Or, kill all running containers: `docker kill $(docker ps -q)`
 
 Now, run `docker ps` again. This should show either only the containers you want
 running, or none at all, depending on how many you stopped.
@@ -272,6 +272,8 @@ as the major application dependencies (Django, DRF, Celery, ReactJS) are kept
 up-to-date, based on the release schedules of these pieces of software.
 
 Feel free to get in touch if you want to ask questions, or suggest improvements.
+
+### 🎉 Happy Building! 🎉
 
 [Celery]: https://docs.celeryproject.org/en/latest/django/first-steps-with-django.html
 [Docker]: https://www.docker.com/
