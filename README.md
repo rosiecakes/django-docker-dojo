@@ -165,12 +165,11 @@ you can run:
 
 This will remove:
 
-  - *All* stopped containers
-  - *All* networks not used by at least one container
-  - *All* images without at least one container associated to them
-  - *All* build cache
+  - *All* stopped containers, *all* networks not used by at least one container,
+  *all* images without at least one container associated to them, and *all* build 
+  cache
   
-(Be aware that you'll need to rebuild *all* of your local Docker containers,
+(You'll need to rebuild all of your local Docker containers,
 networks and volumes if you choose to do this.)
 
 ## Removing things you don't need
@@ -212,15 +211,16 @@ just use the regular commands, for example:
 ## Running the tests
 To run the full test suite, simply run:
 
-- `make runtests`
+- `make setuptests` (Installs test suite and dependencies)
+- `make runtests` (Runs test suite)
 
-(This will both install the test suite and run it all.)
-
-Other test utilities are also available:
+Other individual test utilities are also available:
 
 - `make checksafety` (Checks for security holes or pre-deployment issues.)
 - `make checkstyle` (Checks for code style.)
-- `make coverage` (Reports code coverage.)
+
+We use Tox and PyTest for the main test runner automation, so you can also 
+use those as regular, without the Makefile commands if you prefer to.
 
 ## Predeploy
 Before deploying, you can run a `clean` as well as the testsuite by running:

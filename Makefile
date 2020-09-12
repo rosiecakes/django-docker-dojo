@@ -7,7 +7,11 @@ INSTALL = pip install
 # Sets commands for individual containers
 BACKEND_RUN = docker-compose run --rm backend /bin/bash -c
 BACKEND_EXEC = docker-compose exec backend /bin/bash -c
+
 WORKER_RUN = docker-compose run --rm worker /bin/bash -c
+WORKER_EXEC = docker-compose exec worker /bin/bash -c
+
+DATABASE_RUN = docker-compose run --rm db /bin/bash -c
 DATABASE_EXEC = docker-compose exec db bash -c
 
 # Includes and exports environment variables for Database
@@ -99,9 +103,6 @@ checksafety:
 
 checkstyle:
 	$(BACKEND_RUN) "$(INSTALL) tox && tox -e checkstyle"
-
-coverage:
-	$(BACKEND_RUN) "$(INSTALL) tox && tox -e coverage"
 
 setuptests:
 	$(BACKEND_EXEC) "pipenv install --dev"
