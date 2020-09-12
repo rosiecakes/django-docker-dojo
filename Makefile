@@ -96,19 +96,19 @@ startapp:
 	$(BACKEND_RUN) "cd $(PROJECT); ./manage.py startapp;"
 
 # TEST - Testing tools
-check: checksafety checkstyle
-
-checksafety:
-	$(BACKEND_RUN) "$(INSTALL) tox && tox -e checksafety"
-
-checkstyle:
-	$(BACKEND_RUN) "$(INSTALL) tox && tox -e checkstyle"
-
 setuptests:
 	$(BACKEND_EXEC) "pipenv install --dev"
 
 runtests:
 	$(BACKEND_EXEC) "cd backend; pipenv run tox"
+
+check: checksafety checkstyle
+
+checksafety:
+	$(BACKEND_EXEC) "cd backend; pipenv run tox -e checksafety"
+
+checkstyle:
+	$(BACKEND_EXEC) "cd backend; pipenv run tox -e checkstyle"
 
 django-version:
 	$(BACKEND_RUN) "cd $(PROJECT); python3 -m django --version;"
@@ -126,9 +126,8 @@ springclean:
 	rm -rf .pytest_cache
 	find . -type f -name "*.pyc" -delete
 	rm -rf $(find . -type d -name __pycache__)
-	rm .coverage
-	rm .coverage.*
 
+# Use with caution - drops all local docker stuff
 dockerclean:
 	docker system prune -f
 	docker system prune -f --volumes
