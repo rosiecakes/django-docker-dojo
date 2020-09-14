@@ -15,10 +15,10 @@ surplus to requirements!
 __You__
 
 (It would be extremely useful to have at least a cursory understanding
-of REST as an architectural style, and the premise of decoupling a backend from 
-a frontend. Familiarity with administering Django-based systems and using Python 
-on the web would be handy, as would some experience using Docker on the command
-line!)
+of REST as an architectural style, and the premise of decoupling a data-driven
+backend from a public-facing frontend through REST. Familiarity with 
+administering Django  systems and using Python on the web would be handy, as 
+would some experience using Docker on the command line!)
 
 __Your machine__
 
@@ -221,8 +221,8 @@ just use the regular commands, for example:
 ## Running the tests
 To run the full test suite, simply run:
 
-- `make setuptests` (Installs test suite and dependencies)
-- `make runtests` (Runs test suite)
+- `make setuptests` (This will install the test suite and dependencies)
+- `make runtests` (This will run the test suite)
 
 Other individual test utilities are also available:
 
