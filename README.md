@@ -215,8 +215,8 @@ Alternatively, if you prefer the more traditional Docker commands, you can of co
 just use the regular commands, for example:
 
 * `docker-compose build`
-* `docker-compose run --rm djangoapp roguetrader/manage.py migrate`
-* `docker-compose run --rm djangoapp hello/manage.py collectstatic --no-input'`
+* `docker-compose run --rm djangoapp backend/manage.py migrate`
+* `docker-compose run --rm djangoapp backend/manage.py collectstatic --no-input'`
 
 ## Running the tests
 To run the full test suite, simply run:
