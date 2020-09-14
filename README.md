@@ -12,6 +12,16 @@ architecture. Equally, it could be simplified by removing services that are
 surplus to requirements!
 
 ## Requirements
+__You__
+
+(It would be extremely useful to have at least a cursory understanding
+of REST as an architectural style, and the premise of decoupling a backend from 
+a frontend. Familiarity with administering Django-based systems and using Python 
+on the web would be handy, as would some experience using Docker on the command
+line!)
+
+__Your machine__
+
 You'll need to install [Docker][] and [Docker-Compose][]. You'll want the most 
 recent versions of both for your development machine. This system hasn't been 
 tested on anything beyond Mac OS Catalina 10.15.6, but it's probably safe to 

@@ -117,13 +117,11 @@ predeploy: springclean runtests
 
 # Maintenance & cleanup tools
 springclean:
-	rm -rf build
-	rm -rf backend.egg-info
-	rm -rf dist
-	rm -rf htmlcov
-	rm -rf .tox
-	rm -rf .cache
-	rm -rf .pytest_cache
+	rm -rf backend/backend.egg-info
+	rm -rf backend/dist
+	rm -rf backend/.tox
+	rm -rf backend/.cache
+	rm -rf backend/.pytest_cache
 	find . -type f -name "*.pyc" -delete
 	rm -rf $(find . -type d -name __pycache__)
 
