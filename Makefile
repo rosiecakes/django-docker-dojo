@@ -50,15 +50,18 @@ firstload: makemigrations migrate createadmin
 loaddata:
 	$(BACKEND_RUN) "cd $(PROJECT); ./manage.py loaddata $(APP);"
 
+# Starts any registered Celery worker tasks
 startbeat:
 	$(WORKER_RUN) "celery worker -B -A backend;"
 
-# WARNING - This drops and rebuilds your local db from scratch
+# WARNING - This drops and rebuilds your local db from scratch. You'll need to
+# reimport any data that you remove with it
 rebuilddb:
 	$(DATABASE_EXEC) "PGUSER=$(POSTGRES_USER) PGPASSWORD=$(POSTGRES_PASSWORD) dropdb $(POSTGRES_DB);"
 	$(DATABASE_EXEC) "PGUSER=$(POSTGRES_USER) PGPASSWORD=$(POSTGRES_PASSWORD) createdb $(POSTGRES_DB)"
 	$(BACKEND_RUN) "cd $(PROJECT); ./manage.py migrate;"
 
+# Starts a psql shell if you like actually being inside the database. Usually, I don't
 psqlshell:
 	$(DATABASE_EXEC) "PGUSER=$(POSTGRES_USER) PGPASSWORD=$(POSTGRES_PASSWORD) psql $(POSTGRES_DB)"
 
@@ -116,6 +119,9 @@ django-version:
 predeploy: springclean runtests
 
 # Maintenance & cleanup tools
+
+# Cleans out any weird temp files that the dependencies throw in during build,
+# useful pre-deploy
 springclean:
 	rm -rf backend/backend.egg-info
 	rm -rf backend/dist
@@ -125,9 +131,10 @@ springclean:
 	find . -type f -name "*.pyc" -delete
 	rm -rf $(find . -type d -name __pycache__)
 
-# Use with caution - drops all local docker stuff
+# Use with CAUTION - drops all local docker stuff
 dockerclean:
 	docker system prune -f
 	docker system prune -f --volumes
 
+# See above
 bigclean: springclean dockerclean
