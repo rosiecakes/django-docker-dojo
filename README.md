@@ -90,7 +90,6 @@ a skeleton for future tasks. You can run this on the back-end using
 This will run the task every 5 seconds, updating the data. The front-end will 
 then consume the new data. Real-time data flow!
 * Gunicorn serves the application through the `wsgi.py` file in `/backend`
-* Nginx serves the project's static files.
 
 The project is designed to mostly be administered through a provided `Makefile` 
 in the root directory that provides a number of simple but very convenient 
@@ -201,7 +200,7 @@ project, using your choice of template handler, as per the documentation.
 
 #### Note:
 There are a lot of utilities in the Makefile that will cover pretty much
-all of the regular Django manage.py development workflow stuff you need. It's
+all of the regular Django `manage.py` development workflow stuff you need. It's
 written as a simple wrapper around the regular `docker exec` commands - 
 but it will save you a lot of typing, so take a look at that for some 
 handy shortcuts.
@@ -211,8 +210,8 @@ Alternatively, if you prefer the more traditional Docker commands, you can of co
 just use the regular commands, for example:
 
 * `docker-compose build`
-* `docker-compose run --rm djangoapp backend/manage.py migrate`
-* `docker-compose run --rm djangoapp backend/manage.py collectstatic --no-input'`
+* `docker-compose run --rm backend backend/manage.py migrate`
+* `docker-compose run --rm backend backend/manage.py collectstatic --no-input'`
 
 ## Running the tests
 To run the full test suite, simply run:
@@ -227,6 +226,10 @@ Individual test utilities are also available:
 
 We use Tox and PyTest for the main test runner automation, so you can also 
 use those as regular, without the Makefile commands if you prefer to.
+
+You'll find that the tests probably don't pass, out of the box, that doesn't
+really matter, there's just some styling stuff you'll clean up as
+part of your normal development work.
 
 ## Predeploy
 Before deploying, you can run a `clean` as well as the testsuite by running:
@@ -244,12 +247,15 @@ development).
 
 ## Ongoing development
 There are lots of ways to improve this repository to make it a strong, generic
-starter for API-driven web applications. Any and all ideas are welcome by
-creating a new issue, and/or issuing a Pull Request.
+starter for API-driven web applications. Any / all ideas are welcome by
+creating a new issue, and/or issuing a Pull Request. My advice is not to 
+bundle it with extremely specific technologies though, we want to keep it lean
+and usable for lots of different bases.
 
 We'll also want to make sure that the versions of all of these images, as well
 as the major application dependencies (Django, DRF, Celery, ReactJS) are kept
-up-to-date, based on the release schedules of these pieces of software.
+up-to-date, based on the release schedules of these pieces of software. If
+you have any interest in doing that, that's great :)
 
 Feel free to get in touch if you want to ask questions, or suggest improvements.
 
