@@ -5,11 +5,16 @@ Django Docker Dojo is a starter project for building a Dockerised, API-driven
 web application using Django, Django Rest Framework, PostgreSQL, Celery, 
 Gunicorn & Nginx, served to a decoupled ReactJS front-end.
 
-It's an intentionally simple starter project. Out of the box, it assumes a 
-single database, a single application layer, and a single, de-coupled front-end,
-although it could be fairly easily modified to handle a more complex 
-architecture. Equally, it could be simplified by removing services that are 
-surplus to requirements!
+It's an intentionally simple starter project. Out of the box, it assumes:
+
+- A single database
+- A single application layer
+- A single Worker for long-running or scheduled Celery tasks
+- A single, de-coupled front-end, using ReactJS
+
+This is the base project, but it could be fairly easily modified to handle a 
+more complex architecture. Equally, it could be simplified by removing services 
+that are surplus to requirements!
 
 ## Requirements
 __You__
@@ -45,12 +50,12 @@ container.
 - We use [Celery][] to handle long-running (or scheduled) jobs.
 - We use [Redis][] as the message queue for the Celery schedule.
 
-### Other notes
+__Other notes__
 - [Python][] dependencies are managed through [pipenv][], using `Pipfile` for 
 requirements, and `Pipfile.lock` to lock dependencies.
 - Tests are run using [tox][], [pytest][], and some other tools - including 
 [safety][], [bandit][], [isort][] and [prospector][]. (You may want to remove 
-this test suite and replace it with your own test suite of choice if you have 
+this test suite and replace it with your own suite of choice if you have 
 your own preference.)
 
 ## Some hopefully helpful, pre-configured stuff
@@ -95,7 +100,7 @@ new Make targets specific to your application, following the pattern within the
 Makefile itself.
 
 ## The makefile
-A [Makefile][] is a file of pre-made CLI commands proxied through the `make` 
+A [Makefile][] is a file of pre-made CLI commands run through the `make` 
 command so you have a single, consistent interface by which you can manage 
 otherwise unwieldy commands from different software products and services. 
 The aforementioned Makefile is included to help make developing your Django 
@@ -110,7 +115,7 @@ commands can be found within the Makefile, I highly recommend checking it out!
 
 ## Building the system
 The simplest way to get this stack of containers working is to use the commands 
-in the included Makefile, which will do everything for you. 
+in the Makefile, which will do everything for you. 
 
 After cloning this repository to a fresh directory on your local machine,
 the build workflow should be as simple as running 3 commands:
@@ -123,15 +128,21 @@ back-end / Django admin system.
 * `make loaddata APP=items` - this will load the system with data, through an
 attached set of fixtures, so the example app works.
 
-## Using the system
-__Checking the front and backends__
-* Check that your containers are running. You should have obvious terminal 
-output that confirms, this but you can also run `docker ps` - you should have 6
-containers running.
-* You should then be able to visit http://127.0.0.1:8000/admin/, log in with the
-name 'admin' and the password you specified - and then you'll have access to 
-the backend.
-* You should be able to visit http://127.0.0.1:3000 and see the React front-end.
+__What you should see__
+
+- After the successful build, check that your containers are running. You should
+ have obvious terminal output that confirms, this but you can also run 
+ `docker ps` - you should have 6 containers running.
+- At `http://127.0.0.1:8000/`, you should see DRF's API Root.
+- At `http://127.0.0.1:8000/admin` you should be able to log in with the user name
+`admin` and the password you chose during build.
+- At `http://127.0.0.1:8000/api/items` you should see DRF serving the `Items` endpoint.
+- At `http://127.0.0.1:3000/` you should be able to see the ReactJS frontend,
+consuming `/api/items`.
+- (If you've skipped ahead and already run `make startbeat`, and it's started working,
+you should be able to refresh `http://127.0.0.1:3000/` and watch the Celery task
+updating data, and ReactJs pulling it to the front-end in real-time every
+few seconds.)
 
 #### Running Celery Beat
 * A pre-made Celery Beat task is included, which is a scheduled task that 
@@ -167,21 +178,6 @@ no choice.)
 Now, run `docker ps` again. This should show either only the containers you want
 running, or none at all, depending on how many you stopped.
 
-#### Going nuclear (take caution)
-You almost never need to do this, but if for some reason you want to go nuclear, 
-you can run:
-
-`docker system prune -a`
-
-This will remove:
-
-  - *All* stopped containers, *all* networks not used by at least one container,
-  *all* images without at least one container associated to them, and *all* build 
-  cache
-  
-(You'll need to rebuild all of your local Docker containers,
-networks and volumes if you choose to do this.)
-
 ## Removing things you don't need
 You can, of course, rip out any of the stuff you don't need from this starter 
 project, and you'll almost certainly want to do that with the Django 'Items' 
@@ -190,7 +186,7 @@ need to:
 
 * Remove any of the directories and files that are surplus to requirements
 * Update the Django settings file to reflect anything you've removed (Celery 
-dictionaries, for example)
+dictionaries, apps that are now missing, for example)
 * Run `make uninstall PKG=[package-name]` for any of the dependencies you don't need 
 (more details in the Makefile)
 * Run `make install PKG=[package-name]` for any new dependencies you do need 
@@ -205,7 +201,7 @@ project, using your choice of template handler, as per the documentation.
 
 #### Note:
 There are a lot of utilities in the Makefile that will cover pretty much
-all of the regular Django manage.py developmental workflow stuff you need. It's
+all of the regular Django manage.py development workflow stuff you need. It's
 written as a simple wrapper around the regular `docker exec` commands - 
 but it will save you a lot of typing, so take a look at that for some 
 handy shortcuts.
@@ -221,10 +217,10 @@ just use the regular commands, for example:
 ## Running the tests
 To run the full test suite, simply run:
 
-- `make setuptests` (This will install the test suite and dependencies)
-- `make runtests` (This will run the test suite)
+- `make setuptests` (This will install the test suite and dependencies.)
+- `make runtests` (This will run the test suite.)
 
-Other individual test utilities are also available:
+Individual test utilities are also available:
 
 - `make checksafety` (Checks for security holes or pre-deployment issues.)
 - `make checkstyle` (Checks for code style.)
@@ -243,8 +239,19 @@ before redeploying.
 
 Before deployment, as always, make sure to remove your secrets from version 
 control (remove the `config` directory from VCS), and only make sure that DB, 
-Nginx & Gunicorn settings are set up in production, 
-(and stored securely in development).
+Nginx & Gunicorn settings are set up in production, (and stored securely in 
+development).
+
+## Ongoing development
+There are lots of ways to improve this repository to make it a strong, generic
+starter for API-driven web applications. Any and all ideas are welcome by
+creating a new issue, and/or issuing a Pull Request.
+
+We'll also want to make sure that the versions of all of these images, as well
+as the major application dependencies (Django, DRF, Celery, ReactJS) are kept
+up-to-date, based on the release schedules of these pieces of software.
+
+Feel free to get in touch if you want to ask questions, or suggest improvements.
 
 ## Deployment, and certificates in production
 In production, you'll need to issue a TLS security certificate to ensure the
@@ -271,17 +278,6 @@ time; so use --staging to run as many dry-run attempts you like and
 finally remove it when all seems to be working fine. (It may also be convenient 
 to create a cron script that periodically pauses the web server and launches the
 certificate renewal process, to get around the scheduled expiry.)
-
-## Ongoing development
-There are lots of ways to improve this repository to make it a strong, generic
-starter for API-driven web applications. Any and all ideas are welcome by
-creating a new issue, and/or issuing a Pull Request.
-
-We'll also want to make sure that the versions of all of these images, as well
-as the major application dependencies (Django, DRF, Celery, ReactJS) are kept
-up-to-date, based on the release schedules of these pieces of software.
-
-Feel free to get in touch if you want to ask questions, or suggest improvements.
 
 ### 🎉 Happy Building! 🎉
 
